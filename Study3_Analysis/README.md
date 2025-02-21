@@ -3,127 +3,107 @@
 ## 📌 Objective
 
 Analyze **AI-human team coordination** in a Minecraft-based search-and-rescue mission using multi-modal data:
+# Multi-Modal Data Analysis Workflow
 
-1. **JSON logs** (team actions, AI interventions)
-2. **SPSS surveys** (post-mission team cohesion)
-3. **Video recordings** (non-verbal coordination)
-4. **Chat transcripts** (communication effectiveness)
+**ASIST Study 3 Dataset**
 
-**Key Questions**:
+#### **Team 000315 Pre-Result Analysis**
 
-- How does AI advice timing affect mission success (`game_score`)?
-- Do task-focused interventions outperform motivational ones?
-- Does communication quality correlate with team cohesion?
+Engineer exibited poor skill during the hands on training. It took him a very long time to complete the individual training which resulted in the mission timer running out during the team training section. Once the timer expired, the hands-on training trial was restarted and participants again completed the individual training. Engineer's second attempt still took over 5 minutes to complete individual training. The competency test was then started at 13m remaining on the timer, the engineer took a full 5 minutes to complete the competency test. Experiment team decided that engineer should be allowed to proceed to avoid rescheduling dispite the evident lack of minecraft skill.
 
----
+## Objective
 
-## 🗂 Dataset Overview
+Analyze team performance data across four modalities:
 
-The dataset includes:
+1. JSON behavior logs
+2. Video recordings
+3. Chat transcripts
 
-| **Data Type**   | **Description**                                 | Example Files                         |
-| --------------------- | ----------------------------------------------------- | ------------------------------------- |
-| **JSON Logs**   | Team actions, AI advice timestamps,`game_score`     | `HSRData_TrialMessages_*.metadata`  |
-| **Surveys**     | Post-mission `cohesion_score`, `motivation_level` | `HSRData_Surveys0Numeric_*.sav`     |
-| **Videos**      | Recordings of team interactions                       | `HSRData_OBVideo_*.mp4`             |
-| **Transcripts** | Team communication logs (WebVTT format)               | `HSRData_ZoomAudioTranscript_*.vtt` |
+Identify correlations between AI interventions and team outcomes.
 
----
+## Note
 
-## 🛠 Repository Structure
+All datasets were taken from official CHART ASIST Study 3 Dataset available at ASU official repository.
 
-```
-ASIST_Study3_Analysis/
-├── data/                   # Raw datasets (do not modify)
-│   ├── json_logs/          # JSON logs of team/AI actions
-│   ├── surveys/            # SPSS survey files
-│   ├── videos/             # Video recordings
-│   └── transcripts/        # Chat transcripts (VTT)
-│
-├── processed/              # Processed/cleaned data
-│   ├── json_parsed/        # Flattened JSON logs (CSV)
-│   ├── surveys_parsed.csv  # Cleaned survey data
-│   └── video_frames/       # Extracted key frames (JPG)
-│
-├── scripts/                # Analysis workflows
-│   └── ASIST_Study3_MultiModal_Analysis.ipynb  # Main notebook
-│
-├── results/                # Outputs (plots, tables)
-│   └── correlation_plot.png
-│
-├── requirements.txt        # Python dependencies
-└── README.md               # This file
-```
+#### Subset used :
 
----
+| Team ID | ASI ID        | trial   | intervention_recipent     |
+| ------- | ------------- | ------- | ------------------------- |
+| 000315  | ASI-CMURI-TA1 | T000829 | E001211, E001215, E001155 |
 
-## 🚀 Installation
 
-1. **Clone the repository**:
 
-   ```bash
-   git clone https://github.com/yourusername/ASIST_Study3_Analysis.git
-   cd ASIST_Study3_Analysis
-   ```
-2. **Set up a virtual environment**:
+**AI Agent Action signals** -
 
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # Linux/Mac
-   # .venv\Scripts\activate  # Windows
-   ```
-3. **Install dependencies**:
+1. RemindTransporterBeep
+2. InformAboutTriagedVictim
+3. RemindMedicToInformAboutTriagedVicti
+4. TriageCriticalVictim
+5. EvacuateCriticalVictim
+6. EncouragePlayerProximityToMedicIHMCDyad
+7. RemindChangeMarke
+8. RemindRubblePerturbatio
+9. EvacuationZoneDistanc
+10. TeamSawVictimMarke
+11. TimeElapse
+12. StartEvacuatio
 
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. **Optional (for NLP)**: Add your OpenAI API key to the notebook for transcript analysis.
+**Agents location**-
 
----
+1. Location of the agent in the map -> Room Name
 
-## 📊 Usage
+**Agent Action**-
 
-1. **Run the Jupyter Notebook**:
+1. Transporting victims
+2. Performing their role task including stabilizing victims
+3. wakening up critical victims
+4. placing marking block-> Regular, A, B, C
+5. placing marking block for threat rooms
+6. removing rubbles
+7. detecting victims
 
-   ```bash
-   jupyter lab scripts/ASIST_Study3_MultiModal_Analysis.ipynb
-   ```
+## V1 Dataframe
 
-   - Execute cells sequentially to:
-     - Parse JSON logs and surveys
-     - Label transcript effectiveness with GPT-4
-     - Extract video key frames
-     - Correlate AI advice with team outcomes
-2. **Key Workflows**:
+Timestamp, AI Message, AI Action Class, Transporter Message, Engineer Message, Medic Message is extracted from transcript.csv
 
-   - **Hypothesis 1**: Compare `game_score` between teams receiving early vs. late AI advice.
-   - **Hypothesis 2**: Analyze `cohesion_score` by `advice_type` (task-focused vs. motivational).
-   - **Hypothesis 3**: Link transcript effectiveness labels to mission errors.
+We use Multimodal LLM analysis to analyze video data to give states and locations of agents + victims throughout the experiment
 
----
+States tells us what the agent is doing
+Locations tells use where the agent is located in the map
 
-## 📈 Results
+| Time Stamp | Asi Message | Asi Action Class | Transporter Message | Engineer Message | Medic Message | Transporter State | Engineer State | Medic State | Transporter location | Engineer location | Medic location | Victim Location |
+| ---------- | ----------- | ---------------- | ------------------- | ---------------- | ------------- | ----------------- | -------------- | ----------- | -------------------- | ----------------- | -------------- | --------------- |
+| 11:23:01   | N/A         | N/A              | N/A                 | N/A              | N/A           | N/A               | N/A            | N/A         | N/A                  | N/A               | N/A            | N/A             |
 
-Example output from the analysis:
-![Correlation Plot](results/correlation_plot.png)
-*Teams receiving task-focused advice within 10 minutes showed higher cohesion scores (ρ=0.42, p=0.01).*
+## Final Dataframe
 
----
+States and locations are fused together using LLM analysis to form one action_state column signifying their role in a situation
 
-## 🛑 Dependencies
+| timestamp | asi_reason | asi_action | transporter_message | engineer_message | medic_message | transporter_action_state | engineer_action_state | medic_action_state | victim_location | 
+| --------- | --------- | --------- | ------------------ | --------------- | ------------ | --------------- | --------------- | ------------ | --------------- |
+|           |           |           |                    |                 |              |                 |                 |              |                 |
 
-| Package           | Use Case                             |
-| ----------------- | ------------------------------------ |
-| `opencv-python` | Video frame extraction               |
-| `pandas`        | Data manipulation                    |
-| `scikit-learn`  | Machine learning models              |
-| `seaborn`       | Visualization                        |
-| `openai`        | GPT-4 transcript labeling (optional) |
 
----
+We then utilize another LLM to finally provide ASI Advice score and team score for their actions and LLM's reasoning behiind that
 
-## 📜 License
+| timestamp | asi_reason | asi_action | transporter_message | engineer_message | medic_message | transporter_action_state | engineer_action_state | medic_action_state | victim_location | team_score | asi_advice_score |
+| --------- | --------- | --------- | ------------------ | --------------- | ------------ | --------------- | ---------- | --------------- | --------------- |--------------- |--------------- |
+|     22:03      |   You guys should do [asi_action_class] because...        | 1. RemindTransporterBeep <br/>2. InformAboutTriagedVictim <br/>3. RemindMedicToInformAboutTriagedVicti <br/>4. TriageCriticalVictim <br/>5. EvacuateCriticalVictim <br/>6.EncouragePlayerProximityToMedicIHMCDyad <br/>7. RemindChangeMarke <br/>8. RemindRubblePerturbatio <br/>9. EvacuationZoneDistanc <br/>10. TeamSawVictimMarke <br/>11. TimeElapse <br/>12. StartEvacuatio|     I'm coming for you medic               |     This is more important               |     I can't help you!               |     Carrying a victim from b4 to g4 room               |     Clearing rubbles in threat room for medic  at a9 room          |     waking up critical victim at g5 room        |    next to medic, far from engineer, close to transporter            |  40%          |     75%           |
 
-[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) – Share with attribution to [ASIST Program](https://artificialsocialintelligence.org/).
 
----
+## AI Instruct Modal
+
+We finetune pretrained LLM on our data for understanding minecraft test bed for asist thoroughly and deeply. Then we utilize it to perform-
+
+1. **Multimodal DataAnalysis of Video Data** 
+
+To give information about agent locations and their actions
+
+2. **Text Fusion Data Analysis**
+
+To fuse meanings and relationships between agent communication, their location and state in given situations to a single column
+
+3. **Scoring Analysis**
+
+To score humans and ASI's advice on team work communication and collaboration data   
+
