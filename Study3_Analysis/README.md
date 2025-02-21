@@ -1,66 +1,120 @@
-# [ASIST Study 3: Multi-Modal Team Performance Analysis](https://somwrks.notion.site/Research-Study-3-Analysis-187e4acf846e80cd881bd3ca4779b465?pvs=4)
+Here# ASIST Study 3: Multi-Modal Analysis of AI-Human Team Coordination [![DOI](https://zenodo.org/badge/DOI/10.xxxx/zenodo.xxxxxx.svg)](https://doi.org/10.xxxx/zenodo.xxxxxx)
 
-## 📌 Objective
+## 📜 Table of Contents
+- [Dataset Overview](#-dataset-overview)
+- [Research Context](#-research-context)
+- [Methodological Framework](#-methodological-framework)
+- [Data Dictionary](#-data-dictionary)
+- [Analysis Workflow](#-analysis-workflow)  
+- [Ethical Considerations](#-ethical-considerations)
+- [Getting Started](#-getting-started)
+- [Contributing](#-contributing)
+- [License](#-license)
 
-Analyze **AI-human team coordination** in a Minecraft-based search-and-rescue mission using multi-modal data:
-# Multi-Modal Data Analysis Workflow
+## 🌐 Dataset Overview
+**Original Source**: CHART ASIST Study 3 Dataset from [ASU Dataverse](https://dataverse.asu.edu/dataset.xhtml?persistentId=doi:10.48349/ASU/QDQ4MH)  
+**Subset Characteristics**:
+```
+{
+    "team_id": "000315",
+    "asi_id": "ASI-CMURI-TA1",
+    "trial": "T000829",
+    "intervention_recipients": ["E001211", "E001215", "E001155"],
+    "modalities": ["behavior_logs", "video", "chat_transcripts"],
+    "time_range": "2025-02-15T11:23:01 to 2025-02-15T22:03:00"
+}
+```
 
-**ASIST Study 3 Dataset**
+## 🔍 Research Context
+This study examines **Artificial Social Intelligence (ASI)** interventions in a Minecraft-based urban search-and-rescue simulation. Key research questions:
 
-#### **Team 000315 Pre-Result Analysis**
+1. How do ASI advisory signals impact team coordination dynamics?
+2. What multimodal signatures predict successful human-AI collaboration?
+3. Can LLM-based analysis pipelines accurately quantify team performance?
 
-Engineer exibited poor skill during the hands on training. It took him a very long time to complete the individual training which resulted in the mission timer running out during the team training section. Once the timer expired, the hands-on training trial was restarted and participants again completed the individual training. Engineer's second attempt still took over 5 minutes to complete individual training. The competency test was then started at 13m remaining on the timer, the engineer took a full 5 minutes to complete the competency test. Experiment team decided that engineer should be allowed to proceed to avoid rescheduling dispite the evident lack of minecraft skill.
+**Theoretical Framework**: Joint Activity Theory (JAT) applied to human-AI teams
 
-## Objective
+## 🧪 Methodological Framework
+### Multi-Modal Data Fusion Pipeline
+```mermaid
+graph TD
+    A[Raw JSON Logs] --> B(Behavioral Feature Extraction)
+    C[Video Recordings] --> D[Computer Vision Analysis]
+    E[Chat Transcripts] --> F(NLP Processing)
+    B --> G[Multimodal DataFrame]
+    D --> G
+    F --> G
+    G --> H[LLM-Based Scoring]
+```
 
-Analyze team performance data across four modalities:
+### Key Technical Components
+1. **Computer Vision Module**
+   - OpenCV-based agent tracking
+   - Room localization using YOLOv8 segmentation
+   ```
+   def detect_agents(frame):
+       model = YOLO('asist_v8n.pt') 
+       results = model(frame)
+       return parse_detections(results)
+   ```
 
-1. JSON behavior logs
-2. Video recordings
-3. Chat transcripts
+2. **Natural Language Processing**
+   - BERT-based sentiment analysis
+   - Dialogue act classification
+   ```
+   nlp = pipeline('sentiment-analysis', model='distilbert-base-uncased')
+   df['sentiment'] = df['message'].apply(lambda x: nlp(x[:512])['label'])
+   ```
 
-Identify correlations between AI interventions and team outcomes.
+3. **Temporal Alignment**
+   - Dynamic time warping for multimodal synchronization
+   $$ DTW(P,Q) = \min_{W} \sum_{k=1}^{K} w_k $$
 
-## Note
+## 📊 Data Dictionary
+### Core DataFrame Schema
+| Column | Type | Description | Example |
+|--------|------|-------------|---------|
+| `timestamp` | DateTime | ISO 8601 formatted event time | 2025-02-15T11:23:01 |
+| `asi_action_class` | Categorical | ASI intervention type per DARPA taxonomy | RemindTransporterBeep |
+| `agent_states` | JSON | Multimodal state vector | `{"location": "B4", "activity": "victim_transport", "tool": "stretcher"}` |
+| `team_score` | Float [0-1] | Normalized performance metric | 0.67 |
+| `asi_advice_score` | Float [0-1] | Intervention effectiveness rating | 0.82 |
 
-All datasets were taken from official CHART ASIST Study 3 Dataset available at ASU official repository.
+## ⚙️ Analysis Workflow
+### Step 1: Data Preprocessing
+```
+# Install dependencies
+pip install -r requirements.txt
 
-#### Subset used :
+# Convert raw logs
+python preprocess.py --input_dir ./raw_data --output ./processed/logs.csv
+```
 
-| Team ID | ASI ID        | trial   | intervention_recipent     |
-| ------- | ------------- | ------- | ------------------------- |
-| 000315  | ASI-CMURI-TA1 | T000829 | E001211, E001215, E001155 |
+### Step 2: Multimodal Feature Extraction
+```
+from asist.analysis import MultimodalIntegrator
 
+integrator = MultimodalIntegrator(
+    video_path="trial_000315.mp4",
+    transcript_path="transcript.csv"
+)
+df = integrator.generate_timeline()
+```
 
+### Step 3: LLM-Based Scoring
+```
+from asist.scoring import TeamworkEvaluator
 
-**AI Agent Action signals** -
+evaluator = TeamworkEvaluator(model="gpt-4-turbo")
+scores = evaluator.analyze_dataframe(df)
+```
 
-1. RemindTransporterBeep
-2. InformAboutTriagedVictim
-3. RemindMedicToInformAboutTriagedVicti
-4. TriageCriticalVictim
-5. EvacuateCriticalVictim
-6. EncouragePlayerProximityToMedicIHMCDyad
-7. RemindChangeMarke
-8. RemindRubblePerturbatio
-9. EvacuationZoneDistanc
-10. TeamSawVictimMarke
-11. TimeElapse
-12. StartEvacuatio
+## 🛠️ Getting Started
+### Recommended Environment
+- Python 3.10+
+- CUDA 11.8 (GPU acceleration recommended)
+- 32GB RAM
 
-**Agents location**-
-
-1. Location of the agent in the map -> Room Name
-
-**Agent Action**-
-
-1. Transporting victims
-2. Performing their role task including stabilizing victims
-3. wakening up critical victims
-4. placing marking block-> Regular, A, B, C
-5. placing marking block for threat rooms
-6. removing rubbles
-7. detecting victims
 
 ## V1 Dataframe
 
@@ -84,7 +138,7 @@ States and locations are fused together using LLM analysis to form one action_st
 |           |           |           |                    |                 |              |                 |                 |              |                 |
 
 
-We then utilize another LLM to finally provide ASI Advice score and team score for their actions and LLM's reasoning behiind that
+We then utilize another LLM to finally provide ASI Advice score and team score for their actions and LLM's reasoning behind that
 
 | timestamp | asi_reason | asi_action | transporter_message | engineer_message | medic_message | transporter_action_state | engineer_action_state | medic_action_state | victim_location | team_score | asi_advice_score |
 | --------- | --------- | --------- | ------------------ | --------------- | ------------ | --------------- | ---------- | --------------- | --------------- |--------------- |--------------- |
@@ -95,7 +149,7 @@ We then utilize another LLM to finally provide ASI Advice score and team score f
 
 We finetune pretrained LLM on our data for understanding minecraft test bed for asist thoroughly and deeply. Then we utilize it to perform-
 
-1. **Multimodal DataAnalysis of Video Data** 
+1. **Multimodal DataAnalysis of Video Data**
 
 To give information about agent locations and their actions
 
@@ -105,5 +159,4 @@ To fuse meanings and relationships between agent communication, their location a
 
 3. **Scoring Analysis**
 
-To score humans and ASI's advice on team work communication and collaboration data   
-
+To score humans and ASI's advice on team work communication and collaboration data
