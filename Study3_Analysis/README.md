@@ -51,6 +51,11 @@ graph TD
     G --> H[LLM-Based Scoring]
 ```
 
+![{3CD3D714-96C7-4D29-8592-ED3542A1E9AA}](https://github.com/user-attachments/assets/59e07530-6346-4da3-8e0f-28bae27119cb)
+
+![{CDDC8368-CBD5-411E-BF20-E6E9B33BC45B}](https://github.com/user-attachments/assets/dd0cb89a-c9a5-450b-adae-efff5fe6db8d)
+
+
 ### Key Technical Components
 
 1. **Computer Vision Module**
