@@ -32,6 +32,7 @@ CHART_ASIST/
    # .venv\Scripts\activate  # Windows
    ```
 3. **Follow detailed instructions** in [Study3_Analysis/README.md](Study3_Analysis/README.md) for:
+
    - Data preprocessing
    - Statistical analysis
    - Visualization workflows
@@ -50,7 +51,7 @@ CHART_ASIST/
 
 ## 🛠 Requirements
 
-- Python 3.10+
+- Python 3.10
 - WSL (Windows Subsystem for Linux) recommended for Linux-like environment
 - Jupyter Lab for interactive analysis
 
@@ -65,8 +66,7 @@ CHART_ASIST/
 
 ---
 
-
-# ASIST Study 3: Multi-Modal Analysis of AI-Human Team Coordination 
+# ASIST Study 3: Multi-Modal Analysis of AI-Human Team Coordination
 
 ## 📜 Table of Contents
 
