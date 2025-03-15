@@ -206,38 +206,42 @@ scores = evaluator.analyze_dataframe(df)
 - CUDA 11.8 (GPU acceleration recommended)
 - 16GB RAM
 
-## V1 Dataframe
+## Manual Dataframe
 
 Timestamp, AI Message, AI Action Class, Transporter Message, Engineer Message, Medic Message is extracted from transcript.csv
 
 We use Multimodal LLM analysis to analyze video data to give states and locations of agents + victims throughout the experiment
 
+
+| Time Stamp (Transcript) | Asi Message (Transcript) | Asi Action Class (Transcript) | Transporter Message (Transcript) | Engineer Message (Transcript) | Medic Message (Transcript) |
+| ----------------------- | ------------------------ | ----------------------------- | ------------------------------- | ----------------------------- | -------------------------- |
+| 11:23:01                | N/A                      | N/A                           | N/A                             | N/A                           | N/A                        |
+
+## llmv1 Dataframe
+
 States tells us what the agent is doing
 Locations tells use where the agent is located in the map
 
-| Time Stamp | Asi Message | Asi Action Class | Transporter Message | Engineer Message | Medic Message | Transporter State | Engineer State | Medic State | Transporter location | Engineer location | Medic location | Victim Location |
-| ---------- | ----------- | ---------------- | ------------------- | ---------------- | ------------- | ----------------- | -------------- | ----------- | -------------------- | ----------------- | -------------- | --------------- |
-| 11:23:01   | N/A         | N/A              | N/A                 | N/A              | N/A           | N/A               | N/A            | N/A         | N/A                  | N/A               | N/A            | N/A             |
-
-## Final Dataframe
-
 States and locations are fused together using LLM analysis to form one action_state column signifying their role in a situation
 
-| timestamp | asi_reason | asi_action | transporter_message | engineer_message | medic_message | transporter_action_state | engineer_action_state | medic_action_state | victim_location |
-| --------- | ---------- | ---------- | ------------------- | ---------------- | ------------- | ------------------------ | --------------------- | ------------------ | --------------- |
-|           |            |            |                     |                  |               |                          |                       |                    |                 |
+| timestamp (Transcript) | asi_reason (Transcript) | asi_action (Transcript) | transporter_message (Transcript) | engineer_message (Transcript) | medic_message (Transcript) | transporter_action_state (LLM) | engineer_action_state (LLM) | medic_action_state (LLM) | victim_location (LLM) | 
+| --------- | --------- | --------- | ------------------ | --------------- | ------------ | --------------- | --------------- | ------------ | --------------- |
+|           |           |           |                    |                 |              |                 |                 |              |                 |
 
-We then utilize another LLM to finally provide ASI Advice score and team score for their actions and LLM's reasoning behind that
 
-| timestamp | asi_reason                                       | asi_action                                                                                                                                                                                                                                                                                                                                       | transporter_message      | engineer_message       | medic_message     | transporter_action_state             | engineer_action_state                                 | medic_action_state                   | victim_location                                        | team_score | asi_advice_score |
-| --------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ | ---------------------- | ----------------- | ------------------------------------ | ----------------------------------------------------- | ------------------------------------ | ------------------------------------------------------ | ---------- | ---------------- |
-| 22:03     | You guys should do [asi_action_class] because... | 1. RemindTransporterBeep ``2. InformAboutTriagedVictim ``3. RemindMedicToInformAboutTriagedVicti ``4. TriageCriticalVictim ``5. EvacuateCriticalVictim ``6.EncouragePlayerProximityToMedicIHMCDyad ``7. RemindChangeMarke ``8. RemindRubblePerturbatio ``9. EvacuationZoneDistanc ``10. TeamSawVictimMarke ``11. TimeElapse ``12. StartEvacuatio | I'm coming for you medic | This is more important | I can't help you! | Carrying a victim from b4 to g4 room | Clearing rubbles in threat room for medic  at a9 room | waking up critical victim at g5 room | next to medic, far from engineer, close to transporter | 40%        | 75%              |
+We then utilize another LLM to finally provide ASI Advice score and team score for their actions and LLM's reasoning behiind that
+
+## llmv2 Dataframe
+| timestamp (Transcript) | asi_reason (Transcript) | asi_action (Transcript) | transporter_message (Transcript) | engineer_message (Transcript) | medic_message (Transcript) | transporter_action_state (LLM) | engineer_action_state (LLM) | medic_action_state (LLM) | victim_location (LLM) | team_score (LLM) | asi_advice_score (LLM) | team_score_reason (LLM) | asi_advice_score_reason (LLM)
+| --------- | --------- | --------- | ------------------ | --------------- | ------------ | --------------- | ---------- | --------------- | --------------- |--------------- |--------------- | --------------- | --------------- |
+|     22:03      |   You guys should do [asi_action_class] because...        | 1. RemindTransporterBeep <br/>2. InformAboutTriagedVictim <br/>3. RemindMedicToInformAboutTriagedVicti <br/>4. TriageCriticalVictim <br/>5. EvacuateCriticalVictim <br/>6.EncouragePlayerProximityToMedicIHMCDyad <br/>7. RemindChangeMarke <br/>8. RemindRubblePerturbatio <br/>9. EvacuationZoneDistanc <br/>10. TeamSawVictimMarke <br/>11. TimeElapse <br/>12. StartEvacuatio|     I'm coming for you medic               |     This is more important               |     I can't help you!               |     Carrying a victim from b4 to g4 room               |     Clearing rubbles in threat room for medic  at a9 room          |     waking up critical victim at g5 room        |    next to medic, far from engineer, close to transporter            |  40%          |     75%           | team was inconsistent with their tasks, especially... | asi's advice is particularly useful because... |
+
 
 ## AI Instruct Modal
 
 We finetune pretrained LLM on our data for understanding minecraft test bed for asist thoroughly and deeply. Then we utilize it to perform-
 
-1. **Multimodal DataAnalysis of Video Data**
+1. **Multimodal DataAnalysis of Video Data** 
 
 To give information about agent locations and their actions
 
@@ -247,4 +251,5 @@ To fuse meanings and relationships between agent communication, their location a
 
 3. **Scoring Analysis**
 
-To score humans and ASI's advice on team work communication and collaboration data
+To score humans and ASI's advice on team work communication and collaboration data   
+
