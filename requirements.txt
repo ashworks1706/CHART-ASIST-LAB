@@ -4,3 +4,5 @@ scikit-learn
 matplotlib 
 torch
 ffmpeg
+google-genai
+google
