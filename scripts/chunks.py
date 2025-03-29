@@ -42,6 +42,6 @@ def split_video(video_path, chunk_duration=10):
             print(f"Error creating chunk {i+1}: {e}")
 
 if __name__ == "__main__":
-    video_path = input("Enter the path to the video file: ")
+    video_path = str(input("Enter the path to the video file: "))
     split_video(video_path)
     print("Video splitting complete.")
