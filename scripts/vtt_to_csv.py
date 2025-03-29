@@ -40,8 +40,8 @@ def vtt_to_csv(vtt_path: Path, output_dir: Path):
     print(f"Converted {vtt_path.name} to {output_path}")
 
 # Input and output paths
-input_vtt = Path("/mnt/c/Users/Som/Desktop/CHART ASIST/Study3_Analysis/processed_data/transcripts/HSRData_ZoomAudioTranscript_Trial-na_Team-TM000315_Member-na_CondBtwn-ASI-CMURI-TA1_CondWin-na_Vers-1.vtt")
-output_dir = Path("/mnt/c/Users/Som/Desktop/CHART ASIST/Study3_Analysis/processed_data/csv_transcripts/")
+input_vtt = Path("/home/ash/CHART ASIST/scripts/transcript.vtt")
+output_dir = Path("/mnt/c/Users/Som/Desktop/CHART ASIST/transcripts/")
 
 # Execute conversion
 vtt_to_csv(input_vtt, output_dir)
