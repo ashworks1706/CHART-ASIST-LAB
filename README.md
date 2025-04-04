@@ -87,7 +87,7 @@ CHART_ASIST/
 
 ```
 {
-    "team_id": "000315",
+    "team_id": "000286",
     "asi_id": "ASI-CMURI-TA1",
     "trial": "T000829",
     "intervention_recipients": ["E001211", "E001215", "E001155"],
@@ -183,7 +183,7 @@ python preprocess.py --input_dir ./raw_data --output ./processed/logs.csv
 from asist.analysis import MultimodalIntegrator
 
 integrator = MultimodalIntegrator(
-    video_path="trial_000315.mp4",
+    video_path="trial_000286.mp4",
     transcript_path="transcript.csv"
 )
 df = integrator.generate_timeline()
